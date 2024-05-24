@@ -1,7 +1,6 @@
 import { Component } from '@angular/core';
 import { SandboxService } from '../../entity/sandbox.service';
 import { City, ForecastItem, Today } from '../../entity/interfaces';
-import { ApiService } from '../../entity/api.service';
 
 @Component({
   selector: 'app-main-page',
@@ -13,6 +12,7 @@ export class MainPageComponent {
   today!: Today;
   city!: City;
   isCityHasForecast = true;
+  averageWeekPressure!: number;
 
   constructor(private _sandboxService: SandboxService) {}
 
@@ -28,12 +28,21 @@ export class MainPageComponent {
     this._sandboxService.getFullForecast(city).subscribe((data) => {
       this._sandboxService.fullForecast = data;
       this.weatherList = Object.values(this._sandboxService.getForecastListByDays());
-
       this.today = this._sandboxService.formDayForecast(this.weatherList[0]);
       this.city = this._sandboxService.getCityInfo();
+      this.averageWeekPressure = this.calcAverageWeekPressure(this.weatherList)
 
     }, (error) => {
       this.isCityHasForecast = false;
     })
+  }
+
+  calcAverageWeekPressure(list: any[]) {
+    const allWeekPressure = list.reduce((acc, curr) => {
+      acc.push(curr.allDayPressure)
+      return acc.flat()
+    }, []);
+
+    return this._sandboxService.getAverageNumber(allWeekPressure);
   }
 }

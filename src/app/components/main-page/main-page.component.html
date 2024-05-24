@@ -34,6 +34,11 @@
         <div class="days">
             <app-day-card *ngFor="let day of weatherList" [dayWeather]="day"></app-day-card>
         </div>
+
+        <div *ngIf="averageWeekPressure" class="today_detail">
+            <p class="today_detail__label">AVERAGE WEEK PRESSURE:</p>
+            <p class="today_detail__value">{{averageWeekPressure}}</p>
+        </div>
     </div>
 
     <ng-template #empty>
