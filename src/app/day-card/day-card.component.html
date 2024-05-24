@@ -1,0 +1,16 @@
+<mat-accordion>
+    <mat-expansion-panel (opened)="panelOpenState = true"
+                         (closed)="panelOpenState = false">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+            <div class="short-info">
+                <p>{{dayWeather.date | date:"ccc" | uppercase}}</p>
+                <img [src]="'https://openweathermap.org/img/wn/' + dayWeather.allDayIcon + '@2x.png'">
+            </div>
+            <p class="degrees">{{dayWeather.allDayTemp}}°</p>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+
+      <p>I'm visible because I am open</p>
+    </mat-expansion-panel>
+  </mat-accordion>

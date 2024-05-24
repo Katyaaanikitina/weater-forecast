@@ -8,7 +8,7 @@ import { ForecastItem, Today } from '../entity/interfaces';
   styleUrls: ['./main-page.component.scss']
 })
 export class MainPageComponent {
-  weatherList!: Record<string, any>;
+  weatherList!: any[];
   today!: Today;
 
   constructor(private _sandboxService: SandboxService) {}
@@ -16,10 +16,9 @@ export class MainPageComponent {
   ngOnInit() {
     this._sandboxService.getFullForecast('Warsaw').subscribe((data) => {
       this._sandboxService.fullForecast = data;
-      this.weatherList = this._sandboxService.getForecastListByDays();
+      this.weatherList = Object.values(this._sandboxService.getForecastListByDays());
 
-      this.today = this._sandboxService.formDayForecast(Object.values(this.weatherList)[0]);
-      console.log(this.today)
+      this.today = this._sandboxService.formDayForecast(this.weatherList[0]);
     })
   }
 }

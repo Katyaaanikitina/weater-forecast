@@ -20,5 +20,8 @@
             </div>
         </div>
     </div>
-    <div class="days"></div>
+
+    <div class="days">
+        <app-day-card *ngFor="let day of weatherList" [dayWeather]="day"></app-day-card>
+    </div>
 </div>
