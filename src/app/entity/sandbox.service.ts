@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { Observable, Subject, map } from 'rxjs';
+import { Observable, debounceTime, map } from 'rxjs';
 import { City, Forecast, ForecastItem, Today } from './interfaces';
 
 @Injectable({
@@ -55,6 +55,24 @@ export class SandboxService {
       date: originalDay.date,
       list: originalDay.list
     }
+  }
+
+  getCities(searchValue: string) {
+    return this._apiService.getCitiesList(searchValue).pipe(map((data) => { 
+      const stringsArray: any[] = []
+
+      Object.values(data).forEach((city) => {
+        const stringLocation = [];
+
+        stringLocation.push(city.name);
+        if (city.state) stringLocation.push(city.state);
+        stringLocation.push(city.country);
+
+        stringsArray.push(stringLocation.join(', '))
+      })
+
+      return stringsArray;
+    }))
   }
 
   getAverageNumber(array: number[]): number {

@@ -1,6 +1,6 @@
 
 <div class="forecast">
-    <app-search></app-search>
+    <app-search *ngIf="city" [currentOption]="city.name"></app-search>
 
     <div class="forecast_container">
         <p *ngIf="city" class="city">{{city.name}}</p>

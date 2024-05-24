@@ -13,9 +13,7 @@ export class MainPageComponent {
   today!: Today;
   city!: City;
 
-  constructor(private _sandboxService: SandboxService,
-              private _api: ApiService
-  ) {}
+  constructor(private _sandboxService: SandboxService) {}
 
   ngOnInit() {
     this._sandboxService.getFullForecast('Warsaw').subscribe((data) => {
@@ -24,10 +22,6 @@ export class MainPageComponent {
 
       this.today = this._sandboxService.formDayForecast(this.weatherList[0]);
       this.city = this._sandboxService.getCityInfo();
-      
-      this._api.getCitiesList("Warsaw").subscribe((data) => {
-        console.log(data)
-      })
     })
   }
 }
