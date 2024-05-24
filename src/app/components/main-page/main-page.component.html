@@ -1,4 +1,3 @@
-
 <div class="forecast">
     <app-search 
         *ngIf="city" 
@@ -10,6 +9,7 @@
         <div *ngIf="averageWeekPressure" class="today_detail">
             <p class="today_detail__label">AVERAGE WEEK PRESSURE:</p>
             <p class="today_detail__value">{{averageWeekPressure}} Pa</p>
+            <button mat-flat-button color="warn" [routerLink]="['/chart', city.name]">OPEN INFOGRAPHIC</button>
         </div>
 
         <p *ngIf="city" class="city">{{city.name}}</p>
