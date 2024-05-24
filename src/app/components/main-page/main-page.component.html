@@ -6,7 +6,7 @@
         (onOptionChosen)="loadForecast($event)">
     </app-search>
 
-    <div class="forecast_container">
+    <div *ngIf="isCityHasForecast; else empty" class="forecast_container">
         <p *ngIf="city" class="city">{{city.name}}</p>
     
         <div *ngIf="today" class="today">
@@ -35,4 +35,8 @@
             <app-day-card *ngFor="let day of weatherList" [dayWeather]="day"></app-day-card>
         </div>
     </div>
+
+    <ng-template #empty>
+        <p class="empty">Sorry, we don't have forecast for this city</p>
+    </ng-template>
 </div>

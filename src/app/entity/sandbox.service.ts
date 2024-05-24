@@ -13,7 +13,7 @@ export class SandboxService {
   constructor(private readonly _apiService: ApiService) { }
 
   getFullForecast(city: string): Observable<Forecast> { 
-    return this._apiService.getForecastByCity(city).pipe()
+    return this._apiService.getForecastByCity(city)
   }
 
   getCityInfo(): City {
@@ -68,7 +68,7 @@ export class SandboxService {
         if (city.state) stringLocation.push(city.state);
         stringLocation.push(city.country);
 
-        stringsArray.push(stringLocation.join(', '))
+        stringsArray.push(stringLocation.join(','))
       })
 
       return stringsArray;

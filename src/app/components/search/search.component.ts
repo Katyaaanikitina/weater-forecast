@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { SandboxService } from '../entity/sandbox.service';
+import { SandboxService } from '../../entity/sandbox.service';
 import { debounceTime, fromEvent } from 'rxjs';
 
 @Component({
@@ -17,7 +17,7 @@ export class SearchComponent {
   options: string[] = [];
   filteredOptions!: string[];
 
-  constructor(private _sandboxService: SandboxService) {}
+  constructor(private readonly _sandboxService: SandboxService) {}
 
   ngOnInit() {
     this.options.push(this.currentOption);

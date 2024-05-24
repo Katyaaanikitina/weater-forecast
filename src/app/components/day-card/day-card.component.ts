@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { Today } from '../entity/interfaces';
-import { SandboxService } from '../entity/sandbox.service';
+import { Today } from 'src/app/entity/interfaces';
+import { SandboxService } from 'src/app/entity/sandbox.service';
 
 @Component({
   selector: 'app-day-card',
