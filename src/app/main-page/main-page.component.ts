@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { SandboxService } from '../entity/sandbox.service';
-import { ForecastItem } from '../entity/interfaces';
+import { ForecastItem, Today } from '../entity/interfaces';
 
 @Component({
   selector: 'app-main-page',
@@ -9,7 +9,7 @@ import { ForecastItem } from '../entity/interfaces';
 })
 export class MainPageComponent {
   weatherList!: Record<string, any>;
-  today: Record<any, any> = {};
+  today!: Today;
 
   constructor(private _sandboxService: SandboxService) {}
 
@@ -19,7 +19,6 @@ export class MainPageComponent {
       this.weatherList = this._sandboxService.getForecastListByDays();
 
       this.today = this._sandboxService.formDayForecast(Object.values(this.weatherList)[0]);
-      console.log(this.today)
     })
   }
 }

@@ -1,6 +1,12 @@
 <div class="forecast">
-    <div class="today">
-        <img alt="weather">
+    <div *ngIf="today" class="today">
+        <div class="today_main">
+            <img [src]="'https://openweathermap.org/img/wn/' + today.allDayIcon + '@2x.png'" [alt]="today.allDayWeather">
+            <div class="today_main_info">
+                <p class="today_main_day">{{today.date | date:'EEEE' | uppercase}}</p>
+                <p class="today_main_degree">{{today.allDayTemp}}°</p>
+            </div>
+        </div>
     </div>
     <div class="days"></div>
 </div>

@@ -63,3 +63,11 @@ export interface Weather {
     id: number;
     main: string;
 }
+
+export interface Today {
+    allDayIcon: string;
+    allDayTemp: number;
+    allDayWeather: string;
+    date: string;
+    list: ForecastItem[];
+}
