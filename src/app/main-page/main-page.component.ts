@@ -16,7 +16,14 @@ export class MainPageComponent {
   constructor(private _sandboxService: SandboxService) {}
 
   ngOnInit() {
-    this._sandboxService.getFullForecast('Warsaw').subscribe((data) => {
+    this.loadForecast('warsaw');
+  }
+
+  loadForecast(location: string) {
+    const locationArray = location.split(',');
+    const city = locationArray[0];
+
+    this._sandboxService.getFullForecast(city).subscribe((data) => {
       this._sandboxService.fullForecast = data;
       this.weatherList = Object.values(this._sandboxService.getForecastListByDays());
 

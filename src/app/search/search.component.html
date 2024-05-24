@@ -12,7 +12,7 @@
       <mat-autocomplete requireSelection #auto="matAutocomplete">
         <ng-container *ngFor="let option of filteredOptions;">
             <mat-option [value]="option" class="options">
-              <p>{{option}}</p>
+              <p (click)="setChoice(option)">{{option}}</p>
             </mat-option>
         </ng-container>
       </mat-autocomplete>
