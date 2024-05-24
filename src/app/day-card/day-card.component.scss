@@ -42,4 +42,23 @@
     align-items: center;
 }
 
+.hour {
+    display: flex;
+    margin-bottom: 10px;
 
+    &_time {
+        color: $green-200;
+        font-weight: 100;
+        font-size: 14px;
+    }
+
+    &_degree {
+        color: $green-300;
+        font-weight: 400;
+        font-size: 20px;
+    }
+
+    &_dash {
+        margin: 0 10px;
+    }
+}

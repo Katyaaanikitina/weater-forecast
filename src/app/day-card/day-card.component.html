@@ -11,6 +11,10 @@
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <p>I'm visible because I am open</p>
+      <div class="hour" *ngFor="let hour of dayWeather.list">
+        <p class="hour_time">{{hour.dt_txt | date:'HH:mm'}}</p>
+        <span class="hour_dash">-</span>
+        <p class="hour_degree">{{hour.main.temp}}°</p>
+      </div>
     </mat-expansion-panel>
   </mat-accordion>
