@@ -7,8 +7,13 @@
     </app-search>
 
     <div *ngIf="isCityHasForecast; else empty" class="forecast_container">
+        <div *ngIf="averageWeekPressure" class="today_detail">
+            <p class="today_detail__label">AVERAGE WEEK PRESSURE:</p>
+            <p class="today_detail__value">{{averageWeekPressure}} Pa</p>
+        </div>
+
         <p *ngIf="city" class="city">{{city.name}}</p>
-    
+
         <div *ngIf="today" class="today">
             <div class="today_main">
                 <img [src]="'https://openweathermap.org/img/wn/' + today.allDayIcon + '@2x.png'" [alt]="today.allDayWeather">
@@ -33,11 +38,6 @@
     
         <div class="days">
             <app-day-card *ngFor="let day of weatherList" [dayWeather]="day"></app-day-card>
-        </div>
-
-        <div *ngIf="averageWeekPressure" class="today_detail">
-            <p class="today_detail__label">AVERAGE WEEK PRESSURE:</p>
-            <p class="today_detail__value">{{averageWeekPressure}}</p>
         </div>
     </div>
 
