@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Observable, Subject, map } from 'rxjs';
-import { City, Forecast, ForecastItem } from './interfaces';
+import { City, Forecast, ForecastItem, Today } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -26,26 +26,35 @@ export class SandboxService {
       const newForecastItem = {date: date, list: [curr], 
                                allDayTemp: [curr.main.temp], 
                                allDayWeather: [curr.weather[0].description],
-                               allDayIcon: [curr.weather[0].icon]}
-
+                               allDayIcon: [curr.weather[0].icon],
+                               allDayPressure: [curr.main.pressure],
+                               allDayFeelsLike: [curr.main.feels_like]}
+      
       if (!acc[date]) {
         acc[date] = newForecastItem;
       } else {
-        acc[date].list.push(newForecastItem);
+        acc[date].list.push(curr);
         acc[date].allDayTemp.push(curr.main.temp);
         acc[date].allDayWeather.push(curr.weather[0].description);
         acc[date].allDayIcon.push(curr.weather[0].icon);
+        acc[date].allDayPressure.push(curr.main.pressure);
+        acc[date].allDayFeelsLike.push(curr.main.feels_like);
       }
 
       return acc;
     }, {})
   }
 
-  formDayForecast(originalDay: any) {
-    originalDay['allDayIcon'] = this.getMostOftenElementInArray(originalDay.allDayIcon);
-    originalDay['allDayWeather'] = this.getMostOftenElementInArray(originalDay.allDayWeather);
-    originalDay['allDayTemp'] = this.getAverageNumber(originalDay.allDayTemp);
-    return originalDay;
+  formDayForecast(originalDay: any): Today {
+    return {
+      allDayIcon: this.getMostOftenElementInArray(originalDay.allDayIcon),
+      allDayWeather: this.getMostOftenElementInArray(originalDay.allDayWeather),
+      allDayTemp: this.getAverageNumber(originalDay.allDayTemp),
+      allDayPressure: this.getAverageNumber(originalDay.allDayPressure),
+      allDayFeelsLike: this.getAverageNumber(originalDay.allDayFeelsLike),
+      date: originalDay.date,
+      list: originalDay.list
+    }
   }
 
   getAverageNumber(array: number[]): number {

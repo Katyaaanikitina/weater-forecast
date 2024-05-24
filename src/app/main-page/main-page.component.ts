@@ -19,6 +19,7 @@ export class MainPageComponent {
       this.weatherList = this._sandboxService.getForecastListByDays();
 
       this.today = this._sandboxService.formDayForecast(Object.values(this.weatherList)[0]);
+      console.log(this.today)
     })
   }
 }

@@ -67,6 +67,8 @@ export interface Weather {
 export interface Today {
     allDayIcon: string;
     allDayTemp: number;
+    allDayPressure: number;
+    allDayFeelsLike: number;
     allDayWeather: string;
     date: string;
     list: ForecastItem[];
