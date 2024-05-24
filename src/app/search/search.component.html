@@ -1,0 +1,20 @@
+<p class="label">Search your city...</p>
+
+<form>
+    <mat-form-field>
+      <input #input
+             type="text"
+             placeholder="City"
+             matInput
+             [formControl]="myControl"
+             [matAutocomplete]="auto"
+             (input)="filter()"
+             (focus)="filter()">
+
+      <mat-autocomplete requireSelection #auto="matAutocomplete">
+        <ng-container *ngFor="let option of filteredOptions;">
+            <mat-option [value]="option">{{option}}</mat-option>
+        </ng-container>
+      </mat-autocomplete>
+    </mat-form-field>
+</form>

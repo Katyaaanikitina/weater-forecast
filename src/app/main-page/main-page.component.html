@@ -1,27 +1,34 @@
+
 <div class="forecast">
-    <div *ngIf="today" class="today">
-        <div class="today_main">
-            <img [src]="'https://openweathermap.org/img/wn/' + today.allDayIcon + '@2x.png'" [alt]="today.allDayWeather">
-            <div class="today_main_info">
-                <p class="today_main_day">{{today.date | date:'EEEE' | uppercase}}</p>
-                <p class="today_main_degree">{{today.allDayTemp}}°</p>
+    <app-search></app-search>
+
+    <div class="forecast_container">
+        <p *ngIf="city" class="city">{{city.name}}</p>
+    
+        <div *ngIf="today" class="today">
+            <div class="today_main">
+                <img [src]="'https://openweathermap.org/img/wn/' + today.allDayIcon + '@2x.png'" [alt]="today.allDayWeather">
+                <div class="today_main_info">
+                    <p class="today_main_day">{{today.date | date:'EEEE' | uppercase}}</p>
+                    <p class="today_main_degree">{{today.allDayTemp}}°</p>
+                </div>
+            </div>
+    
+            <div class="today_details">
+                <div class="today_detail">
+                    <p class="today_detail__label">FEELS LIKE</p>
+                    <p class="today_detail__value">{{today.allDayFeelsLike}}°</p>
+                </div>
+    
+                <div class="today_detail">
+                    <p class="today_detail__label">PRESSURE</p>
+                    <p class="today_detail__value">{{today.allDayPressure}} Pa</p>
+                </div>
             </div>
         </div>
-
-        <div class="today_details">
-            <div class="today_detail">
-                <p class="today_detail__label">FEELS LIKE</p>
-                <p class="today_detail__value">{{today.allDayFeelsLike}}°</p>
-            </div>
-
-            <div class="today_detail">
-                <p class="today_detail__label">PRESSURE</p>
-                <p class="today_detail__value">{{today.allDayPressure}} Pa</p>
-            </div>
+    
+        <div class="days">
+            <app-day-card *ngFor="let day of weatherList" [dayWeather]="day"></app-day-card>
         </div>
-    </div>
-
-    <div class="days">
-        <app-day-card *ngFor="let day of weatherList" [dayWeather]="day"></app-day-card>
     </div>
 </div>

@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { SandboxService } from '../entity/sandbox.service';
-import { ForecastItem, Today } from '../entity/interfaces';
+import { City, ForecastItem, Today } from '../entity/interfaces';
+import { ApiService } from '../entity/api.service';
 
 @Component({
   selector: 'app-main-page',
@@ -10,8 +11,11 @@ import { ForecastItem, Today } from '../entity/interfaces';
 export class MainPageComponent {
   weatherList!: any[];
   today!: Today;
+  city!: City;
 
-  constructor(private _sandboxService: SandboxService) {}
+  constructor(private _sandboxService: SandboxService,
+              private _api: ApiService
+  ) {}
 
   ngOnInit() {
     this._sandboxService.getFullForecast('Warsaw').subscribe((data) => {
@@ -19,6 +23,11 @@ export class MainPageComponent {
       this.weatherList = Object.values(this._sandboxService.getForecastListByDays());
 
       this.today = this._sandboxService.formDayForecast(this.weatherList[0]);
+      this.city = this._sandboxService.getCityInfo();
+      
+      this._api.getCitiesList("Warsaw").subscribe((data) => {
+        console.log(data)
+      })
     })
   }
 }

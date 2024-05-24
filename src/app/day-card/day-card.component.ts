@@ -14,7 +14,6 @@ export class DayCardComponent {
   constructor(private _sandboxService: SandboxService) {}
   
   ngOnInit() {
-    console.log(this.dayWeather)
     this.dayWeather = this._sandboxService.formDayForecast(this.dayWeather);
   }
 }
