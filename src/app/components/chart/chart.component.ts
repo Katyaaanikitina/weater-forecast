@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { SandboxService } from 'src/app/entity/sandbox.service';
+import { SandboxService } from 'src/app/shared/services/forecast.service';
 import Chart from 'chart.js/auto';
-import { switchMap } from 'rxjs';
+import { Subscription, switchMap } from 'rxjs';
 import { ActivatedRoute, Params } from '@angular/router';
-import { ForecastItem, TimesAndTemperatures } from 'src/app/entity/interfaces';
+import { ForecastItem, TimesAndTemperatures } from 'src/app/shared/interfaces/forecast';
 
 @Component({
   selector: 'app-chart',
@@ -13,25 +13,20 @@ import { ForecastItem, TimesAndTemperatures } from 'src/app/entity/interfaces';
 export class ChartComponent {
   city!: string;
   chart!: Chart;
+  subscription!: Subscription;
 
   constructor(private readonly _sandboxService: SandboxService,
               private readonly _route: ActivatedRoute) {}
 
   ngOnInit() {
-    this._route.params.pipe(
-      switchMap((params: Params) => {
-        return this._sandboxService.getFullForecast(params['city'])
-      })
-
-    ).subscribe((data) => {
-      this.city = data.city.name;
-      const timesAndTemperature = this.getTimesAndTemperatures(data.list)
-      this.drawChart(timesAndTemperature.times, timesAndTemperature.temperatures);
-    })
-    
+    this.subscription = this._loadChartForCity();
   }
 
-  drawChart(labels: string[], data: number[]): void {
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
+  private _drawChart(labels: string[], data: number[]): void {
     this.chart = new Chart('canvas', {
       type: 'line',
       data: {
@@ -57,15 +52,28 @@ export class ChartComponent {
     });
   }
 
-  getTimesAndTemperatures(list: ForecastItem[]): TimesAndTemperatures {
-    const forecastTimes: string[] = [];
-    const forecastTemperatures: number[] = [];
+  private _getTimesAndTemperatures(list: ForecastItem[]): TimesAndTemperatures {
+    const times: string[] = [];
+    const temperatures: number[] = [];
 
     list.forEach((item: ForecastItem) => {
-      forecastTimes.push(item.dt_txt)
-      forecastTemperatures.push(item.main.temp)
+      times.push(item.dt_txt);
+      temperatures.push(item.main.temp);
     })
     
-    return { times: forecastTimes, temperatures: forecastTemperatures }
+    return { times, temperatures };
+  }
+
+  private _loadChartForCity(): Subscription {
+    return this._route.params.pipe(
+      switchMap((params: Params) => {
+        return this._sandboxService.getFullForecast(params['city'])
+      })
+
+    ).subscribe((data) => {
+      this.city = data.city.name;
+      const timesAndTemperature = this._getTimesAndTemperatures(data.list); // todo
+      this._drawChart(timesAndTemperature.times, timesAndTemperature.temperatures); // todo
+    })
   }
 }

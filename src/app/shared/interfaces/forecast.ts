@@ -84,15 +84,6 @@ export interface Today {
     list: ForecastItem[];
 }
 
-export interface CitySearched {
-    country: string;
-    lat: number;
-    local_names: Record<any, any>;
-    lon: number;
-    name: string;
-    state: string;
-}
-
 export interface TimesAndTemperatures {
     times: string[];
     temperatures: number[];

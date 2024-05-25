@@ -1,7 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { SandboxService } from '../../entity/sandbox.service';
-import { debounceTime, fromEvent } from 'rxjs';
+import { SandboxService } from '../../shared/services/forecast.service';
+import { Subscription, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs';
 
 @Component({
   selector: 'app-search',
@@ -16,6 +16,7 @@ export class SearchComponent {
   myControl = new FormControl('');
   options: string[] = [];
   filteredOptions!: string[];
+  subscription!: Subscription;
 
   constructor(private readonly _sandboxService: SandboxService) {}
 
@@ -24,19 +25,28 @@ export class SearchComponent {
   }
 
   ngAfterViewInit() {
-    fromEvent(this.input.nativeElement, 'input').pipe(debounceTime(1000)).subscribe((value) => {
-      if (this.input.nativeElement.value) {
+    this.subscription = fromEvent(this.input.nativeElement, 'input')
+      .pipe(distinctUntilChanged(),debounceTime(1000))
+      .subscribe((value) => {
+        if (!this.input.nativeElement.value) {
+          this.filteredOptions = [];
+          return;
+        }
+        
         this._sandboxService.getCities(this.input.nativeElement.value).subscribe((cities) => {
           this.filteredOptions = cities;
-        })
-      } else {
-        this.filteredOptions = [];
-      }
+        });
     })
   }
 
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
+
   setChoice(chosenElement: string): void {
-    this.onOptionChosen.emit(chosenElement);
+    const locationArray = chosenElement.split(',');
+    const city = locationArray[0];
+    this.onOptionChosen.emit(city);
   }
 }
 

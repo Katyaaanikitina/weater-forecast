@@ -3,6 +3,10 @@
 :host {
     display: block;
     width: 150px;
+
+    @media screen and (max-width: 1100px) {
+        width: 100px;
+    }
 }
 
 .mat-expansion-panel {
@@ -12,7 +16,6 @@
 
 .mat-expansion-panel-header-title {
     display: flex;
-    width: 100%;
     justify-content: space-between;
     gap: 20px;
     color: $green-200;
@@ -23,12 +26,18 @@
 
     img {
         width: 40px;
+        @media screen and (max-width: 1100px) {
+            width: 20px;
+        }
     }
 
     .degrees {
         color: $green-300;
         font-weight: 400;
         font-size: 26px;
+        @media screen and (max-width: 1100px) {
+            font-size: 16px;
+        }
     }
 }
 
@@ -41,6 +50,12 @@
     display: flex;
     justify-content: center;
     align-items: center;
+
+    p {
+        @media screen and (max-width: 1100px) {
+            font-size: 12px;
+        }
+    }
 }
 
 .hour {
@@ -51,15 +66,24 @@
         color: $green-200;
         font-weight: 100;
         font-size: 14px;
+        @media screen and (max-width: 1100px) {
+            font-size: 10px;
+        }
     }
 
     &_degree {
         color: $green-300;
         font-weight: 400;
         font-size: 20px;
+        @media screen and (max-width: 1100px) {
+            font-size: 10px;
+        }
     }
 
     &_dash {
         margin: 0 10px;
+        @media screen and (max-width: 1100px) {
+            margin: 0 2px;
+        }
     }
 }

@@ -1,7 +1,11 @@
 @import './styles/variables';
 
-p, h1, h2, h3, body {
-    margin: 0;
+*, *::before, *::after {
+    box-sizing: border-box;
+  }
+
+* {
+  margin: 0;
 }
 
 html, body { height: 100%; }

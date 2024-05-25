@@ -6,13 +6,17 @@
     </app-search>
 
     <div *ngIf="isCityHasForecast; else empty" class="forecast_container">
-        <div *ngIf="averageWeekPressure" class="today_detail">
-            <p class="today_detail__label">AVERAGE WEEK PRESSURE:</p>
-            <p class="today_detail__value">{{averageWeekPressure}} Pa</p>
-            <button mat-flat-button color="warn" [routerLink]="['/chart', city.name]">OPEN INFOGRAPHIC</button>
+        <div class="forecast_header">
+            <div *ngIf="averageWeekPressure" class="today_detail">
+                <p class="today_detail__label">AVERAGE WEEK PRESSURE:</p>
+                <p class="today_detail__value">{{averageWeekPressure}} Pa</p>
+                <a [routerLink]="['/chart', city.name]" target="_blank">
+                    <button mat-flat-button color="warn">OPEN INFOGRAPHIC</button>
+                </a>
+            </div>
+    
+            <p *ngIf="city" class="city">{{city.name}}</p>
         </div>
-
-        <p *ngIf="city" class="city">{{city.name}}</p>
 
         <div *ngIf="today" class="today">
             <div class="today_main">

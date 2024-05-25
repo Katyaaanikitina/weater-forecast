@@ -1,6 +1,6 @@
 import { Component, Input } from '@angular/core';
-import { DayForecast, Today } from 'src/app/entity/interfaces';
-import { SandboxService } from 'src/app/entity/sandbox.service';
+import { SandboxService } from 'src/app/shared/services/forecast.service';
+import { DayForecast, Today } from 'src/app/shared/interfaces/forecast';
 
 @Component({
   selector: 'app-day-card',

@@ -1,16 +1,17 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
 import { Observable, map } from 'rxjs';
-import { City, DayForecast, Forecast, ForecastItem, Today } from './interfaces';
+import { City, DayForecast, Forecast, Today } from '../interfaces/forecast';
+import { UtilitiesService } from './utilities.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class SandboxService {
-  fullForecast!: Forecast;
-  forecastListByDays!: Record<string, ForecastItem[]>;
+  fullForecast!: Forecast; 
 
-  constructor(private readonly _apiService: ApiService) { }
+  constructor(private readonly _apiService: ApiService,
+              private readonly _utilitiesService: UtilitiesService) { }
 
   getFullForecast(city: string): Observable<Forecast> { 
     return this._apiService.getForecastByCity(city)
@@ -22,8 +23,10 @@ export class SandboxService {
 
   getForecastListByDays(): DayForecast[] {  
     const listByDays = this.fullForecast.list.reduce((acc: Record<string, DayForecast>, curr) => {
-      const date = curr.dt_txt.split(' ')[0];
-      const newForecastItem = {date: date, list: [curr], 
+      const [date] = curr.dt_txt?.split(' ') ?? [];
+      
+      const newForecastItem = {date: date, 
+                               list: [curr],
                                allDayTemp: [curr.main.temp], 
                                allDayWeather: [curr.weather[0].description],
                                allDayIcon: [curr.weather[0].icon],
@@ -49,11 +52,11 @@ export class SandboxService {
 
   formDayForecast(originalDay: DayForecast): Today {
     return {
-      allDayIcon: this.getMostOftenElementInArray(originalDay.allDayIcon),
-      allDayWeather: this.getMostOftenElementInArray(originalDay.allDayWeather),
-      allDayTemp: this.getAverageNumber(originalDay.allDayTemp),
-      allDayPressure: this.getAverageNumber(originalDay.allDayPressure),
-      allDayFeelsLike: this.getAverageNumber(originalDay.allDayFeelsLike),
+      allDayIcon: this._utilitiesService.getMostOftenElementInArray(originalDay.allDayIcon),
+      allDayWeather: this._utilitiesService.getMostOftenElementInArray(originalDay.allDayWeather),
+      allDayTemp: this._utilitiesService.getAverageNumber(originalDay.allDayTemp),
+      allDayPressure: this._utilitiesService.getAverageNumber(originalDay.allDayPressure),
+      allDayFeelsLike: this._utilitiesService.getAverageNumber(originalDay.allDayFeelsLike),
       date: originalDay.date,
       list: originalDay.list
     }
@@ -61,43 +64,16 @@ export class SandboxService {
 
   getCities(searchValue: string): Observable<string[]> {
     return this._apiService.getCitiesList(searchValue).pipe(map((data) => { 
-      const stringsArray: string[] = []
 
-      Object.values(data).forEach((city) => {
-        const stringLocation = [];
+      return Object.values(data).map((city) => {
+        const cityNames = []; 
 
-        stringLocation.push(city.name);
-        if (city.state) stringLocation.push(city.state);
-        stringLocation.push(city.country);
+        cityNames.push(city.name);
+        if (city.state) cityNames.push(city.state);
+        cityNames.push(city.country);
 
-        stringsArray.push(stringLocation.join(','))
+        return cityNames.join(',');
       })
-
-      return stringsArray;
     }))
-  }
-
-  getAverageNumber(array: number[]): number {
-      const sum = array.reduce((acc: number, curr: number) => {
-        return acc + curr
-      }, 0);
-
-      return Math.round(sum / array.length);
-  }
-
-  getMostOftenElementInArray(array: string[]): string {
-    let hashMap: Record<string, number> = {};
-    let max = '';
-    let maxi = 0;
-
-    array.forEach((element) => {
-      (hashMap[element]) ? hashMap[element]++ : hashMap[element] = 1;
-      if (maxi < hashMap[element]) {
-        max = element;
-        maxi = hashMap[element];
-      }
-    });
-
-    return max;
   }
 }

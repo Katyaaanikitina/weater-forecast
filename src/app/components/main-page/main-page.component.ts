@@ -1,6 +1,8 @@
 import { Component } from '@angular/core';
-import { SandboxService } from '../../entity/sandbox.service';
-import { City, DayForecast, Today } from '../../entity/interfaces';
+import { SandboxService } from '../../shared/services/forecast.service';
+import { Subscription } from 'rxjs';
+import { City, DayForecast, Today } from 'src/app/shared/interfaces/forecast';
+import { UtilitiesService } from 'src/app/shared/services/utilities.service';
 
 @Component({
   selector: 'app-main-page',
@@ -13,36 +15,40 @@ export class MainPageComponent {
   city!: City;
   isCityHasForecast = true;
   averageWeekPressure!: number;
+  subscription!: Subscription;
 
-  constructor(private readonly _sandboxService: SandboxService) {}
+  constructor(private readonly _sandboxService: SandboxService,
+              private readonly _utilitiesService: UtilitiesService) {}
 
   ngOnInit() {
     this.loadForecast('warsaw');
   }
 
-  loadForecast(location: string): void {
-    this.isCityHasForecast = true;
-    const locationArray = location.split(',');
-    const city = locationArray[0];
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
+  }
 
-    this._sandboxService.getFullForecast(city).subscribe((data) => {
+  loadForecast(city: string): void {
+    this.isCityHasForecast = true;
+
+    this.subscription = this._sandboxService.getFullForecast(city).subscribe((data) => {
       this._sandboxService.fullForecast = data;
       this.weatherList = this._sandboxService.getForecastListByDays();
       this.today = this._sandboxService.formDayForecast(this.weatherList[0]);
       this.city = this._sandboxService.getCityInfo();
-      this.averageWeekPressure = this.calcAverageWeekPressure(this.weatherList)
+      this.averageWeekPressure = this._calcAverageWeekPressure(this.weatherList)
 
     }, (error) => {
       this.isCityHasForecast = false;
     })
   }
 
-  calcAverageWeekPressure(list: DayForecast[]): number {
+  private _calcAverageWeekPressure(list: DayForecast[]): number {
     const allWeekPressure = list.reduce((acc: number[][], curr) => {
       acc.push(curr.allDayPressure)
       return acc
     }, []);
 
-    return this._sandboxService.getAverageNumber(allWeekPressure.flat());
+    return this._utilitiesService.getAverageNumber(allWeekPressure.flat());
   }
 }
