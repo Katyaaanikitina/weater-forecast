@@ -64,6 +64,16 @@ export interface Weather {
     main: string;
 }
 
+export interface DayForecast {
+    allDayIcon: string[];
+    allDayTemp: number[];
+    allDayPressure: number[];
+    allDayFeelsLike: number[];
+    allDayWeather: string[];
+    date: string;
+    list: ForecastItem[];
+}
+
 export interface Today {
     allDayIcon: string;
     allDayTemp: number;
@@ -72,4 +82,18 @@ export interface Today {
     allDayWeather: string;
     date: string;
     list: ForecastItem[];
+}
+
+export interface CitySearched {
+    country: string;
+    lat: number;
+    local_names: Record<any, any>;
+    lon: number;
+    name: string;
+    state: string;
+}
+
+export interface TimesAndTemperatures {
+    times: string[];
+    temperatures: number[];
 }

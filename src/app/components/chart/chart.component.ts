@@ -1,8 +1,9 @@
-import { Component, Input } from '@angular/core';
+import { Component } from '@angular/core';
 import { SandboxService } from 'src/app/entity/sandbox.service';
 import Chart from 'chart.js/auto';
-import { Observable, switchMap } from 'rxjs';
+import { switchMap } from 'rxjs';
 import { ActivatedRoute, Params } from '@angular/router';
+import { ForecastItem, TimesAndTemperatures } from 'src/app/entity/interfaces';
 
 @Component({
   selector: 'app-chart',
@@ -11,14 +12,13 @@ import { ActivatedRoute, Params } from '@angular/router';
 })
 export class ChartComponent {
   city!: string;
-  chart: any = []
-  title = 'ng-chart';
+  chart!: Chart;
 
-  constructor(private _sandboxService: SandboxService,
-              private route: ActivatedRoute) {}
+  constructor(private readonly _sandboxService: SandboxService,
+              private readonly _route: ActivatedRoute) {}
 
   ngOnInit() {
-    this.route.params.pipe(
+    this._route.params.pipe(
       switchMap((params: Params) => {
         return this._sandboxService.getFullForecast(params['city'])
       })
@@ -31,7 +31,7 @@ export class ChartComponent {
     
   }
 
-  drawChart(labels: string[], data: number[]) {
+  drawChart(labels: string[], data: number[]): void {
     this.chart = new Chart('canvas', {
       type: 'line',
       data: {
@@ -57,15 +57,15 @@ export class ChartComponent {
     });
   }
 
-  getTimesAndTemperatures(list: any) {
+  getTimesAndTemperatures(list: ForecastItem[]): TimesAndTemperatures {
     const forecastTimes: string[] = [];
     const forecastTemperatures: number[] = [];
 
-    list.forEach((item: any) => {
+    list.forEach((item: ForecastItem) => {
       forecastTimes.push(item.dt_txt)
       forecastTemperatures.push(item.main.temp)
     })
     
-    return {times: forecastTimes, temperatures: forecastTemperatures}
+    return { times: forecastTimes, temperatures: forecastTemperatures }
   }
 }

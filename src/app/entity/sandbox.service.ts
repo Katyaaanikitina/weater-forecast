@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { ApiService } from './api.service';
-import { Observable, debounceTime, map } from 'rxjs';
-import { City, Forecast, ForecastItem, Today } from './interfaces';
+import { Observable, map } from 'rxjs';
+import { City, DayForecast, Forecast, ForecastItem, Today } from './interfaces';
 
 @Injectable({
   providedIn: 'root'
@@ -20,8 +20,8 @@ export class SandboxService {
     return this.fullForecast.city
   }
 
-  getForecastListByDays(): Record<string, ForecastItem[]> {  
-    return this.fullForecast.list.reduce((acc: Record<string, any>, curr) => {
+  getForecastListByDays(): DayForecast[] {  
+    const listByDays = this.fullForecast.list.reduce((acc: Record<string, DayForecast>, curr) => {
       const date = curr.dt_txt.split(' ')[0];
       const newForecastItem = {date: date, list: [curr], 
                                allDayTemp: [curr.main.temp], 
@@ -43,9 +43,11 @@ export class SandboxService {
 
       return acc;
     }, {})
+
+    return Object.values(listByDays)
   }
 
-  formDayForecast(originalDay: any): Today {
+  formDayForecast(originalDay: DayForecast): Today {
     return {
       allDayIcon: this.getMostOftenElementInArray(originalDay.allDayIcon),
       allDayWeather: this.getMostOftenElementInArray(originalDay.allDayWeather),
@@ -57,9 +59,9 @@ export class SandboxService {
     }
   }
 
-  getCities(searchValue: string) {
+  getCities(searchValue: string): Observable<string[]> {
     return this._apiService.getCitiesList(searchValue).pipe(map((data) => { 
-      const stringsArray: any[] = []
+      const stringsArray: string[] = []
 
       Object.values(data).forEach((city) => {
         const stringLocation = [];
@@ -84,7 +86,7 @@ export class SandboxService {
   }
 
   getMostOftenElementInArray(array: string[]): string {
-    let hashMap: Record<any, number> = {};
+    let hashMap: Record<string, number> = {};
     let max = '';
     let maxi = 0;
 

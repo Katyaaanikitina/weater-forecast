@@ -35,7 +35,7 @@ export class SearchComponent {
     })
   }
 
-  setChoice(chosenElement: string) {
+  setChoice(chosenElement: string): void {
     this.onOptionChosen.emit(chosenElement);
   }
 }
