@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { SandboxService } from '../../shared/services/forecast.service';
+import { SandboxService } from '../../../shared/services/forecast.service';
 import { Subscription } from 'rxjs';
 import { City, DayForecast, Today } from 'src/app/shared/interfaces/forecast';
 import { UtilitiesService } from 'src/app/shared/services/utilities.service';

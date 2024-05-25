@@ -1,6 +1,6 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { SandboxService } from '../../shared/services/forecast.service';
+import { SandboxService } from '../../../shared/services/forecast.service';
 import { Subscription, debounceTime, distinctUntilChanged, fromEvent } from 'rxjs';
 
 @Component({
